@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "489230557122",
+    "firebase_url": "https://dpay-59cbc-default-rtdb.firebaseio.com",
+    "project_id": "dpay-59cbc",
+    "storage_bucket": "dpay-59cbc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:489230557122:android:9c0056b8ef1119ec7d805b",
+        "android_client_info": {
+          "package_name": "com.example.dpay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "489230557122-jc8knsjmi7c70von0nq4u8hirh65j81r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkD_2ZPdy5YC2RlHNvlHAKwaehCVHsS9w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "489230557122-jc8knsjmi7c70von0nq4u8hirh65j81r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
