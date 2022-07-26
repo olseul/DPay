@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dpay.R
 import com.example.dpay.databinding.FragmentHomeBinding
 import com.example.dpay.mypage.DBkey.Companion.DB_ARTICLES
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ChildEventListener
@@ -66,12 +67,16 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         // 글 등록 버튼 클릭 시
         fragmentHomeBinding.addFloatingButton.setOnClickListener {
             context?.let {
-                val intent = Intent(it, AddArticleActivity::class.java)
-                startActivity(intent)
+                //todo 로그인 기능 구현 후 주석 지우기!!!
+//                if(auth.currentUser!=null){
+                    val intent = Intent(it, AddArticleActivity::class.java)
+                    startActivity(intent)
+//                }else {
+//                    Snackbar.make(view, "로그인 후 사용해주세요", Snackbar.LENGTH_LONG).show()
+//                }
             }
 
         }
-
         articleDB.addChildEventListener(listener)
     }
 
