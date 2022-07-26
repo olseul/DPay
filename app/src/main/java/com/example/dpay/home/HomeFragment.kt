@@ -1,5 +1,6 @@
 package com.example.dpay.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -61,6 +62,15 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         // articleRecyclerView을 걸어주면, 스크롤 되어 화면에서 벗어나도 뷰를 제거하지 않고 재사용한다.
         fragmentHomeBinding.articleRecyclerView.layoutManager = LinearLayoutManager(context)
         fragmentHomeBinding.articleRecyclerView.adapter = articleAdapter
+
+        // 글 등록 버튼 클릭 시
+        fragmentHomeBinding.addFloatingButton.setOnClickListener {
+            context?.let {
+                val intent = Intent(it, AddArticleActivity::class.java)
+                startActivity(intent)
+            }
+
+        }
 
         articleDB.addChildEventListener(listener)
     }
