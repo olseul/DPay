@@ -9,15 +9,13 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.example.dpay.R
 import com.example.dpay.mypage.DBkey.Companion.DB_ARTICLES
 import com.google.firebase.auth.FirebaseAuth
@@ -70,6 +68,8 @@ class AddArticleActivity: AppCompatActivity() {
             val price = findViewById<EditText>(R.id.priceEditText).text.toString()
             val writerId = auth.currentUser?.uid.orEmpty()
 
+            showProgress()
+
             // 이미지가 있으면 업로드 과정을 추가한다.
             if(selectedUri != null){
                 val  photoUri = selectedUri ?: return@setOnClickListener
@@ -79,6 +79,7 @@ class AddArticleActivity: AppCompatActivity() {
                     },
                     errorHandler = {
                         Toast.makeText(this, "사진 업로드에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                        hideProgress()
                     }
                 )
             }else {
@@ -110,6 +111,7 @@ class AddArticleActivity: AppCompatActivity() {
         val model = ArticleModel(writerId, title, System.currentTimeMillis(), "$price 원", imageUrl)
         articleDB.push().setValue(model)
 
+        hideProgress()
         finish()
     }
 
@@ -134,6 +136,14 @@ class AddArticleActivity: AppCompatActivity() {
         intent.type = "image/*"
         //startActivityForResult(intent, 2020)
         startForResult.launch(intent)
+    }
+
+    private fun showProgress() {
+        findViewById<ProgressBar>(R.id.progressBar).isVisible = true
+    }
+
+    private fun hideProgress(){
+        findViewById<ProgressBar>(R.id.progressBar).isVisible = false
     }
 
     /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
