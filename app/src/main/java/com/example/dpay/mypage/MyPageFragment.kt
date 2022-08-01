@@ -66,7 +66,12 @@ class MyPageFragment: Fragment(R.layout.fragment_mypage) {
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(requireActivity()) { task ->
                         if(task.isSuccessful) {
-                            Toast.makeText(context, "회원가입 성공. 로그인 버튼을 눌러주세요.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "회원가입에 성공하셨습니다. 로그인이 유지됩니다.", Toast.LENGTH_SHORT).show()
+                            binding?.emailEditText?.isEnabled = false
+                            binding?.passwordEditText?.isEnabled = false
+                            binding?.signUpButton?.isEnabled = false
+                            binding?.signInOutButton?.text = "로그아웃"
+
                         }else {
                             Toast.makeText(context, "회원가입 실패. 이미 가입한 이메일일 수 있습니다.", Toast.LENGTH_SHORT).show()
                         }
