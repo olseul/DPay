@@ -6,8 +6,11 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dpay.R
+import com.example.dpay.chatlist.ChatListItem
 import com.example.dpay.databinding.FragmentHomeBinding
+import com.example.dpay.mypage.DBkey.Companion.CHILD_CHAT
 import com.example.dpay.mypage.DBkey.Companion.DB_ARTICLES
+import com.example.dpay.mypage.DBkey.Companion.DB_USERS
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -21,6 +24,7 @@ import com.google.firebase.ktx.Firebase
 class HomeFragment: Fragment(R.layout.fragment_home) {
 
     private lateinit var articleDB: DatabaseReference
+    private lateinit var userDB: DatabaseReference
     private lateinit var articleAdapter: ArticleAdapter
 
     private val articleList = mutableListOf<ArticleModel>()
@@ -57,8 +61,42 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
         //디비 가져오기
         articleList.clear()
+        userDB = Firebase.database.reference.child(DB_USERS)
         articleDB = Firebase.database.reference.child(DB_ARTICLES)
-        articleAdapter = ArticleAdapter()
+        articleAdapter = ArticleAdapter(onItemClicked = { articleModel ->
+            if(auth.currentUser != null) {
+                // 로그인을 한 상태
+
+                if (auth.currentUser!!.uid != articleModel.writerId) {
+
+                    val chatRoom = ChatListItem(
+                        readerId = auth.currentUser!!.uid,
+                        writerId = articleModel.writerId,
+                        title = articleModel.title,
+                        key = System.currentTimeMillis()
+                    )
+
+                    userDB.child(auth.currentUser!!.uid)
+                        .child(CHILD_CHAT)
+                        .push()
+                        .setValue(chatRoom)
+
+                    userDB.child(articleModel.writerId)
+                        .child(CHILD_CHAT)
+                        .push()
+                        .setValue(chatRoom)
+
+                    Snackbar.make(view, "채팅방이 생성되었습니다. 채팅탭에서 확인해주세요.", Snackbar.LENGTH_LONG).show()
+
+                } else {
+                    //내가 올린 글일 때
+                    Snackbar.make(view, "본인이 올린 글입니다.", Snackbar.LENGTH_LONG).show()
+                }
+            }else {
+                // 로그인을 안한 상태
+                Snackbar.make(view, "로그인 후 사용해주세요", Snackbar.LENGTH_LONG).show()
+            }
+        })
 
         // articleRecyclerView을 걸어주면, 스크롤 되어 화면에서 벗어나도 뷰를 제거하지 않고 재사용한다.
         fragmentHomeBinding.articleRecyclerView.layoutManager = LinearLayoutManager(context)
