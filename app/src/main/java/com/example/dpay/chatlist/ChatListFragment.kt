@@ -1,10 +1,12 @@
 package com.example.dpay.chatlist
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dpay.R
+import com.example.dpay.chatdetail.ChatRoomActivity
 import com.example.dpay.databinding.FragmentChatlistBinding
 import com.example.dpay.home.ArticleAdapter
 import com.example.dpay.mypage.DBkey.Companion.CHILD_CHAT
@@ -35,8 +37,13 @@ class ChatListFragment: Fragment(R.layout.fragment_chatlist) {
         binding = fragmentChatlistBinding
 
 
-        chatListAdapter = ChatListAdapter(onItemClicked = {
+        chatListAdapter = ChatListAdapter(onItemClicked = { chatRoom ->
             // 채팅방으로 이동
+            context?.let {
+                val intent = Intent(it, ChatRoomActivity::class.java)
+                intent.putExtra("chatKey",chatRoom.key)
+                startActivity(intent)
+            }
         })
 
         chatRoomList.clear()
