@@ -113,10 +113,7 @@ class MyPageFragment: Fragment(R.layout.fragment_mypage) {
                         auth.signInWithCredential(credential)
                             .addOnCompleteListener(requireActivity()) { task ->
                                 if(task.isSuccessful){
-                                    binding?.emailEditText?.isEnabled = false
-                                    binding?.passwordEditText?.isEnabled = false
-                                    binding?.signUpButton?.isEnabled = false
-                                    binding?.signInOutButton?.text = "로그아웃"
+                                    // 여기서부터 다시 구현하기
                                 }
                                 else {
                                     Toast.makeText(context,"페이스북 로그인이 실패했습니다.", Toast.LENGTH_SHORT).show()
