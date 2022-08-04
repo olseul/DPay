@@ -12,7 +12,7 @@ class ChatListAdapter(val onItemClicked: (ChatListItem) -> Unit): ListAdapter<Ch
     inner class ViewHolder(private val binding: ItemChatListBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(chatListItem: ChatListItem) {
 
-            // 글 목록(전체)을 눌렀을 때
+            // 채팅 목록(전체)을 눌렀을 때
             binding.root.setOnClickListener {
                 onItemClicked(chatListItem)
             }

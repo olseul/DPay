@@ -1,16 +1,22 @@
 package com.example.dpay.mypage
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.example.dpay.R
 import com.example.dpay.databinding.FragmentMypageBinding
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginResult
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import java.util.concurrent.Executor
 
 class MyPageFragment: Fragment(R.layout.fragment_mypage) {
 
@@ -18,6 +24,7 @@ class MyPageFragment: Fragment(R.layout.fragment_mypage) {
     private val auth: FirebaseAuth by lazy {
         Firebase.auth
     }
+    private var callbackManager: CallbackManager = CallbackManager.Factory.create()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -95,6 +102,41 @@ class MyPageFragment: Fragment(R.layout.fragment_mypage) {
                 binding.signUpButton.isEnabled = enable
             }
         }
+
+        fragmentMypageBinding.facebookLoginButton.setOnClickListener {
+            binding?.let { binding->
+                binding.facebookLoginButton.setPermissions("email", "public_profile")
+                binding.facebookLoginButton.registerCallback(callbackManager, object: FacebookCallback<LoginResult>{
+                    override fun onSuccess(result: LoginResult) {
+                        //로그인 성공
+                        val credential = FacebookAuthProvider.getCredential(result.accessToken.token)
+                        auth.signInWithCredential(credential)
+                            .addOnCompleteListener(requireActivity()) { task ->
+                                if(task.isSuccessful){
+                                    binding?.emailEditText?.isEnabled = false
+                                    binding?.passwordEditText?.isEnabled = false
+                                    binding?.signUpButton?.isEnabled = false
+                                    binding?.signInOutButton?.text = "로그아웃"
+                                }
+                                else {
+                                    Toast.makeText(context,"페이스북 로그인이 실패했습니다.", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                    }
+
+                    override fun onCancel() {
+                        //로그인하다 취소했을 때
+                    }
+
+
+                    override fun onError(error: FacebookException) {
+                        Toast.makeText(context,"페이스북 로그인이 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+
+
+                })
+            }
+        }
     }
 
     override fun onStart() {
@@ -134,4 +176,11 @@ class MyPageFragment: Fragment(R.layout.fragment_mypage) {
         binding?.signUpButton?.isEnabled = false
         binding?.signInOutButton?.text = "로그아웃"
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+    }
+
 }

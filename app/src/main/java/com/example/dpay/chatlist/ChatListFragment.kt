@@ -37,6 +37,7 @@ class ChatListFragment: Fragment(R.layout.fragment_chatlist) {
         binding = fragmentChatlistBinding
 
 
+        // 채팅 목록 클릭 시
         chatListAdapter = ChatListAdapter(onItemClicked = { chatRoom ->
             // 채팅방으로 이동
             context?.let {

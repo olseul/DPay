@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">DPay</string>
+    <string name="facebook_app_id">621846249661693</string>
+    <string name="fb_login_protocol_scheme">fb621846249661693</string>
+    <string name="facebook_client_token">f6fa4bebd434dafd6fb23e368174c8f8</string>
 </resources>
