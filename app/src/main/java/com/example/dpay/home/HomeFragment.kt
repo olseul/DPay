@@ -64,37 +64,30 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         userDB = Firebase.database.reference.child(DB_USERS)
         articleDB = Firebase.database.reference.child(DB_ARTICLES)
         articleAdapter = ArticleAdapter(onItemClicked = { articleModel ->
-            if(auth.currentUser != null) {
-                // 로그인을 한 상태
+            if (auth.currentUser!!.uid != articleModel.writerId) {
 
-                if (auth.currentUser!!.uid != articleModel.writerId) {
+                val chatRoom = ChatListItem(
+                    readerId = auth.currentUser!!.uid,
+                    writerId = articleModel.writerId,
+                    title = articleModel.title,
+                    key = System.currentTimeMillis()
+                )
 
-                    val chatRoom = ChatListItem(
-                        readerId = auth.currentUser!!.uid,
-                        writerId = articleModel.writerId,
-                        title = articleModel.title,
-                        key = System.currentTimeMillis()
-                    )
+                userDB.child(auth.currentUser!!.uid)
+                    .child(CHILD_CHAT)
+                    .push()
+                    .setValue(chatRoom)
 
-                    userDB.child(auth.currentUser!!.uid)
-                        .child(CHILD_CHAT)
-                        .push()
-                        .setValue(chatRoom)
+                userDB.child(articleModel.writerId)
+                    .child(CHILD_CHAT)
+                    .push()
+                    .setValue(chatRoom)
 
-                    userDB.child(articleModel.writerId)
-                        .child(CHILD_CHAT)
-                        .push()
-                        .setValue(chatRoom)
+                Snackbar.make(view, "채팅방이 생성되었습니다. 채팅탭에서 확인해주세요.", Snackbar.LENGTH_LONG).show()
 
-                    Snackbar.make(view, "채팅방이 생성되었습니다. 채팅탭에서 확인해주세요.", Snackbar.LENGTH_LONG).show()
-
-                } else {
-                    //내가 올린 글일 때
-                    Snackbar.make(view, "본인이 올린 글입니다.", Snackbar.LENGTH_LONG).show()
-                }
-            }else {
-                // 로그인을 안한 상태
-                Snackbar.make(view, "로그인 후 사용해주세요", Snackbar.LENGTH_LONG).show()
+            } else {
+                //내가 올린 글일 때
+                Snackbar.make(view, "본인이 올린 글입니다.", Snackbar.LENGTH_LONG).show()
             }
         })
 
@@ -104,15 +97,8 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
         // 글 등록 버튼 클릭 시
         fragmentHomeBinding.addFloatingButton.setOnClickListener {
-            context?.let {
-                  if(auth.currentUser!=null){
-                      val intent = Intent(it, AddArticleActivity::class.java)
-                      startActivity(intent)
-                  }else {
-                      Snackbar.make(view, "로그인 후 사용해주세요", Snackbar.LENGTH_LONG).show()
-                  }
-            }
-
+            val intent = Intent(context, AddArticleActivity::class.java)
+            startActivity(intent)
         }
         articleDB.addChildEventListener(listener)
     }
