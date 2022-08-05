@@ -13,6 +13,10 @@ import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.common.SignInButton
+import com.google.android.gms.common.SignInButton.SIZE_WIDE
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -34,6 +38,7 @@ class LoginActivity:AppCompatActivity() {
         initSignUpButton()
         initEmailAndPasswordEditText()
         initFacebookLoginButton()
+        initGoogleLoginButton()
     }
 
     private fun initLoginButton() {
@@ -123,6 +128,9 @@ class LoginActivity:AppCompatActivity() {
         })
     }
 
+    private fun initGoogleLoginButton() {
+        // 여기서부터 구현
+    }
     private fun getInputEmail(): String {
         return findViewById<EditText>(R.id.emailEditText).text.toString()
     }
