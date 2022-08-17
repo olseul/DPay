@@ -13,12 +13,12 @@ import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
-import com.google.android.gms.common.SignInButton.SIZE_WIDE
-import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -26,6 +26,10 @@ class LoginActivity:AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var callbackManager: CallbackManager
+
+    // 구글 로그인에 필요한 변수
+    var googleSignInClient : GoogleSignInClient? = null
+    var GOOGLE_LOGIN_CODE = 9001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,7 +133,18 @@ class LoginActivity:AppCompatActivity() {
     }
 
     private fun initGoogleLoginButton() {
-        // 여기서부터 구현
+        var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        var googleLoginButton = findViewById<SignInButton>(R.id.googleLoginButton)
+
+        googleLoginButton.setOnClickListener {
+            var signInIntent = googleSignInClient?.signInIntent
+            startActivityForResult(signInIntent, GOOGLE_LOGIN_CODE)
+        }
     }
     private fun getInputEmail(): String {
         return findViewById<EditText>(R.id.emailEditText).text.toString()
@@ -143,5 +158,23 @@ class LoginActivity:AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         callbackManager.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == GOOGLE_LOGIN_CODE) {
+            val result = data?.let { Auth.GoogleSignInApi.getSignInResultFromIntent(it) }
+            if (result != null) {
+                if(result.isSuccess) {
+                    val account = result.signInAccount
+                    val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
+                    auth.signInWithCredential(credential)
+                        .addOnCompleteListener { task ->
+                            if(task.isSuccessful){
+                                finish()
+                            }
+                            else {
+                                Toast.makeText(this@LoginActivity,"페이스북 로그인이 실패했습니다.", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                }
+            }
+        }
     }
 }
