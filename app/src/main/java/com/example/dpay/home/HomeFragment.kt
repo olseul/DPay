@@ -1,8 +1,11 @@
 package com.example.dpay.home
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dpay.R
@@ -14,10 +17,7 @@ import com.example.dpay.mypage.DBkey.Companion.DB_USERS
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -54,6 +54,22 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
     // 프래그먼트 뷰가 생성될 시
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //이름 입력
+        userDB = Firebase.database.reference.child("Users")
+        val currentUserDB = userDB.child(getCurrentUserID())
+        currentUserDB.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.child("name").value == null){
+                    showNameInputPopup()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
 
         //생성된 뷰에 bind를 걸어주는 과정
         val fragmentHomeBinding = FragmentHomeBinding.bind(view)
@@ -101,6 +117,40 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
             startActivity(intent)
         }
         articleDB.addChildEventListener(listener)
+    }
+
+    private fun showNameInputPopup() {
+        val editText = EditText(context)
+
+        AlertDialog.Builder(context)
+            .setTitle("이름을 입력해주세요")
+            .setView(editText)
+            .setPositiveButton("저장"){ _, _ ->
+                if(editText.text.isEmpty()){
+                    showNameInputPopup()
+                } else {
+                    saveUserName(editText.text.toString())
+                }
+            }
+            .setCancelable(false)
+            .show()
+    }
+
+    private fun saveUserName(name: String){
+        val userId = getCurrentUserID()
+        val currentUserDB = userDB.child(userId)
+        val user = mutableMapOf<String, Any>()
+        user["userId"] = userId
+        user["name"] = name
+        currentUserDB.updateChildren(user)
+    }
+
+    private fun  getCurrentUserID(): String {
+        if(auth.currentUser == null){
+            Toast.makeText(context, "로그인을 먼저 해주세요", Toast.LENGTH_SHORT).show()
+        }
+
+        return auth.currentUser?.uid.orEmpty()
     }
 
     override fun onResume() {
