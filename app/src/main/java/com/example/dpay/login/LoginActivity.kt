@@ -28,8 +28,8 @@ class LoginActivity:AppCompatActivity() {
     private lateinit var callbackManager: CallbackManager
 
     // 구글 로그인에 필요한 변수
-    var googleSignInClient : GoogleSignInClient? = null
-    var GOOGLE_LOGIN_CODE = 9001
+    private var googleSignInClient : GoogleSignInClient? = null
+    private var GOOGLE_LOGIN_CODE = 9001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -170,7 +170,7 @@ class LoginActivity:AppCompatActivity() {
                                 finish()
                             }
                             else {
-                                Toast.makeText(this@LoginActivity,"페이스북 로그인이 실패했습니다.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@LoginActivity,"구글 로그인이 실패했습니다.", Toast.LENGTH_SHORT).show()
                             }
                         }
                 }
