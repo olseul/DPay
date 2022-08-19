@@ -42,9 +42,9 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
 
         //로그인 시작 안될 때
-        if(auth.currentUser == null){
+        /*if(auth.currentUser == null){
             startActivity(Intent(this, LoginActivity::class.java))
-        }
+        }*/
     }
     //프래그먼트를 관리
    private fun replaceFragment(fragment: Fragment) {

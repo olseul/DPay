@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import com.example.dpay.MainActivity
 import com.example.dpay.R
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -54,7 +55,7 @@ class LoginActivity:AppCompatActivity() {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if(task.isSuccessful){
-                        finish()
+                        startActivity(Intent(this, MainActivity::class.java))
                     } else {
                         Toast.makeText(this, "로그인에 실패했습니다. 이메일 또는 비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show()
                     }
@@ -111,7 +112,7 @@ class LoginActivity:AppCompatActivity() {
                 auth.signInWithCredential(credential)
                     .addOnCompleteListener(this@LoginActivity) { task ->
                         if(task.isSuccessful){
-                            finish()
+                            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                         }
                         else {
                             Toast.makeText(this@LoginActivity,"페이스북 로그인이 실패했습니다.", Toast.LENGTH_SHORT).show()
@@ -167,7 +168,7 @@ class LoginActivity:AppCompatActivity() {
                     auth.signInWithCredential(credential)
                         .addOnCompleteListener { task ->
                             if(task.isSuccessful){
-                                finish()
+                                startActivity(Intent(this, MainActivity::class.java))
                             }
                             else {
                                 Toast.makeText(this@LoginActivity,"구글 로그인이 실패했습니다.", Toast.LENGTH_SHORT).show()
