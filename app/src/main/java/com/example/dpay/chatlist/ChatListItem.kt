@@ -4,8 +4,8 @@ data class ChatListItem (
     val readerId: String,
     val writerId: String,
     val title: String,
-    val key: Long
+    val key: String,
     ){
 
-    constructor(): this("", "", "", 0)
+    constructor(): this("", "", "", "")
 }

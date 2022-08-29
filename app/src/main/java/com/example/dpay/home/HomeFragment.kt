@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dpay.R
+import com.example.dpay.chatdetail.ChatItem
 import com.example.dpay.chatlist.ChatListItem
 import com.example.dpay.databinding.FragmentHomeBinding
 import com.example.dpay.mypage.DBkey.Companion.CHILD_CHAT
@@ -81,22 +82,22 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         articleDB = Firebase.database.reference.child(DB_ARTICLES)
         articleAdapter = ArticleAdapter(onItemClicked = { articleModel ->
             if (auth.currentUser!!.uid != articleModel.writerId) {
-
                 val chatRoom = ChatListItem(
                     readerId = auth.currentUser!!.uid,
                     writerId = articleModel.writerId,
                     title = articleModel.title,
-                    key = System.currentTimeMillis()
+                    key = auth.currentUser!!.uid + articleModel.writerId + articleModel.articleId
                 )
 
                 userDB.child(auth.currentUser!!.uid)
+                        //uid를 키?
                     .child(CHILD_CHAT)
-                    .push()
+                    .child(auth.currentUser!!.uid + articleModel.writerId + articleModel.articleId)
                     .setValue(chatRoom)
 
                 userDB.child(articleModel.writerId)
                     .child(CHILD_CHAT)
-                    .push()
+                    .child(auth.currentUser!!.uid + articleModel.writerId + articleModel.articleId)
                     .setValue(chatRoom)
 
                 Snackbar.make(view, "채팅방이 생성되었습니다. 채팅탭에서 확인해주세요.", Snackbar.LENGTH_LONG).show()

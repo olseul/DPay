@@ -1,18 +1,14 @@
 package com.example.dpay.home
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -40,6 +36,8 @@ class AddArticleActivity: AppCompatActivity() {
     private val articleDB: DatabaseReference by lazy {
         Firebase.database.reference.child(DB_ARTICLES)
     }
+
+
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,7 +106,8 @@ class AddArticleActivity: AppCompatActivity() {
     }
 
     private fun uploadArticle(writerId: String, title: String, price:String, imageUrl: String){
-        val model = ArticleModel(writerId, title, System.currentTimeMillis(), "$price 원", imageUrl)
+        var articleId : String? = articleDB.push().getKey()
+        val model = articleId?.let { ArticleModel(it, writerId, title, System.currentTimeMillis(), "$price 원", imageUrl) }
         articleDB.push().setValue(model)
 
         hideProgress()
