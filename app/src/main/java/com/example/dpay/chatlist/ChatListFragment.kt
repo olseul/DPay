@@ -42,6 +42,7 @@ class ChatListFragment: Fragment(R.layout.fragment_chatlist) {
             // 채팅방으로 이동
             context?.let {
                 val intent = Intent(it, ChatRoomActivity::class.java)
+                println(chatRoom.key)
                 intent.putExtra("chatKey",chatRoom.key)
                 startActivity(intent)
             }
