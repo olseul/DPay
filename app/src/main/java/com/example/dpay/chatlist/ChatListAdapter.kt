@@ -6,18 +6,32 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dpay.databinding.ItemChatListBinding
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 class ChatListAdapter(val onItemClicked: (ChatListItem) -> Unit): ListAdapter<ChatListItem, ChatListAdapter.ViewHolder>(diffUtil) {
 
+    private lateinit var userDB: DatabaseReference
+
     inner class ViewHolder(private val binding: ItemChatListBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(chatListItem: ChatListItem) {
-
             // 채팅 목록(전체)을 눌렀을 때
             binding.root.setOnClickListener {
                 onItemClicked(chatListItem)
             }
-
-            binding.chatRoomTitleTextView.text = chatListItem.title
+            userDB = Firebase.database.reference.child("Users")
+            val currentUserDB = userDB.child(chatListItem.writerId)
+            currentUserDB.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    binding.chatRoomWriterIdTextView.text = snapshot.child("name").value.toString()
+                }
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
         }
     }
 
