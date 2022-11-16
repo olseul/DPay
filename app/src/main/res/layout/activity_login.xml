@@ -5,22 +5,37 @@
     android:layout_height="match_parent"
     android:padding="24dp">
 
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="20dp"
+        app:srcCompat="@drawable/dpaylogo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <EditText
         android:id="@+id/emailEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:hint="아이디"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/loginedittext"
+        android:backgroundTintMode="add"
+        android:hint="이메일 형식으로 입력해주세요"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/imageView3" />
 
     <EditText
         android:id="@+id/passwordEditText"
         android:layout_width="0dp"
+        android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
-        android:hint="비밀번호"
+        android:background="@drawable/loginedittext"
+        android:backgroundTintMode="add"
+        android:hint="비밀번호 8자리 이상 입력해주세요"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emailEditText" />
@@ -30,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        android:backgroundTint="@color/green"
+        android:backgroundTint="#3A4CA8"
         android:text="회원가입"
         app:layout_constraintEnd_toStartOf="@id/loginButton"
         app:layout_constraintTop_toBottomOf="@id/passwordEditText" />
@@ -39,7 +54,7 @@
         android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/green"
+        android:backgroundTint="#3A4CA8"
         android:text="로그인"
         app:layout_constraintEnd_toEndOf="@id/passwordEditText"
         app:layout_constraintTop_toBottomOf="@+id/passwordEditText" />
@@ -61,5 +76,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/facebookLoginButton"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:textAlignment="center"
+        android:textSize="14dp"
+        android:textColor="#3A4CA8"
+        android:textStyle="bold"
+        android:text="* 고려대 세종캠퍼스 학생들이 이용할 수 있는 더치페이 앱 *"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
