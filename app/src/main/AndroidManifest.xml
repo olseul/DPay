@@ -29,6 +29,7 @@
         <activity android:name=".chatdetail.ChatRoomActivity"/>
         <activity android:name=".login.LoginActivity"/>
         <activity android:name=".MainActivity"/>
+        <activity android:name=".mypage.UpdateProfileActivity"/>
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
         <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>

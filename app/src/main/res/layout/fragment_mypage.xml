@@ -27,6 +27,7 @@
         app:layout_constraintTop_toBottomOf="@id/profileImageView" />
 
     <Button
+        android:id="@+id/profileupdateView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
