@@ -12,11 +12,13 @@
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:layout_margin="12dp"
+        android:background="@drawable/item_chat_list_imageview_background"
+        android:backgroundTint="#AAA3A3"
         android:scaleType="center"
+        android:src="@drawable/ic_baseline_person_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/item_chat_list_imageview_background"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/chatRoomWriterIdTextView"
