@@ -107,7 +107,7 @@ class AddArticleActivity: AppCompatActivity() {
 
     private fun uploadArticle(writerId: String, title: String, price:String, imageUrl: String){
         var articleId : String? = articleDB.push().getKey()
-        val model = articleId?.let { ArticleModel(it, writerId, title, System.currentTimeMillis(), "$price 원", imageUrl) }
+        val model = articleId?.let { ArticleModel(it, writerId, title, System.currentTimeMillis(), "배달비 $price 원", imageUrl) }
         articleDB.push().setValue(model)
 
         hideProgress()
